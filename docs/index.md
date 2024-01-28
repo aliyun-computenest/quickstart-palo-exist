@@ -89,7 +89,7 @@ C:\Program Files\PalServer\steam\steamapps\common\PalServer\Pal\Saved
     ```
     PowerShell 可以从这里打开：
 
-    <img src="images/powershell.png" width="400"/>
+    <img src="images/powershell.png" width="400"/>  
 
     <img src="images/stop_service_windows.png" width="400"/>
 4. 将 Saved.zip 解并覆盖到 C:\Program Files\PalServer\steam\steamapps\common\PalServer\Pal\Saved 即可。
