@@ -16,12 +16,11 @@
 
 <hr/>
 
-## 操作步骤
-### 1. 备份存档（无存档可跳过）
+## 1. 备份存档（无存档可跳过）
 为了使用计算巢的能力来管理幻兽帕鲁服务器，计算巢需要先将你的 ECS 服务器重置为计算巢定制的操作系统镜像。
 所以，如果你的服务器上已经有了存档，为了避免你和帕鲁的努力白费，建议先备份存档。
 
-#### 1.1 Windows 系统的 Palworld 存档备份
+### 1.1 Windows 系统的 Palworld 存档备份
 如果你原来是通过 ECS 扩展程序（OOS）安装的幻兽帕鲁服务器，且操作系统为 Windows，你可以在这个路径下找到幻兽帕鲁的服务器存档：
 ```
 C:\Program Files\PalServer\steam\steamapps\common\PalServer\Pal\Saved
