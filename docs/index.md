@@ -1,4 +1,4 @@
-# 5 分钟，将你的幻兽帕鲁服务器迁移到计算巢
+![image](https://github.com/aliyun-computenest/quickstart-palo-exist/assets/3530602/525d5b19-7b62-49c5-b210-667fd6369bcc)# 5 分钟，将你的幻兽帕鲁服务器迁移到计算巢
 
 使用计算巢一键搭建幻兽帕鲁服务器的玩家，可以在控制台上直界面化修改死亡掉落等配置。
 但如果你创建了 ECS，通过 ECS 扩展程序（OOS）来安装的幻兽帕鲁服务器，就没有这些界面化管理功能，需要登陆服务器手动修改配置文件，非常不方便。
@@ -30,10 +30,14 @@ C:\Program Files\PalServer\steam\steamapps\common\PalServer\Pal\Saved
 1. 访问 [ECS 控制台](https://ecs.console.aliyun.com/server)，找到你的服务器，点击 **远程连接** > **立即登录**。注意不要选择免密登陆。
 
     <img src="images/connect_to_ecs_windows_ui.png" width="400"/>
-2. 找到存档位置，将存档目录打包成 zip 包。
+2. 备份前你需要先停止游戏服务，以确保所有的游戏进度已写入存档。你可以通过在 PowerShell 中执行这个命令来停止游戏服务。
+   ```powershell
+   Get-Process -name PalServer-Win64-Test-Cmd | Stop-Process
+   ```
+3. 找到存档位置，将存档目录打包成 zip 包。
 
     <img src="images/archive_windows.png" width="400"/>
-3. 将压缩后的存档文件，拖动到 workbench\Download 目录后，就会触发浏览器的文件下载，然后将其下载到本地。
+4. 将压缩后的存档文件，拖动到 workbench\Download 目录后，就会触发浏览器的文件下载，然后将其下载到本地。
 
     <img src="images/download_windows.png" width="400"/>
 <hr/>
@@ -50,11 +54,14 @@ C:\Program Files\PalServer\steam\steamapps\common\PalServer\Pal\Saved
     <img src="images/connect_to_ecs_windows.png" width="400"/>
 2. 找到存档位置，使用如下命令将存档打包：
    ```bash
-   tar -cvf /PalSaved.tar /PalSaved
+   # 迁移前，请先停止游戏服务以确保迁移成功
+   docker stop palworld-server
+   # 如果提示 command not found，说明没有安装 zip，可以尝试执行 yum install zip 先
+   zip -r /PalSaved.zip /PalSaved
    ```
-3. 打包完成后，在 ECS 远程连接界面，点击左上角的文件，**打开文件树**。在打包后的 /PalSaved.tar 文件上右键，选择 **下载文件**。
+3. 打包完成后，在 ECS 远程连接界面，点击左上角的文件，**打开文件树**。在打包后的 /PalSaved.zip 文件上右键，选择 **下载文件**。
 
-    <img src="images/download_linux.png" width="400"/>
+    <img src="https://ucc.alicdn.com/pic/developer-ecology/cyrnp3txtwslq_a2e39139edd546399791d97ea07cebf3.png" width="400"/>
 <hr/>
 
 ## 2. 创建计算巢幻兽帕鲁管理服务（迁移到计算巢）
@@ -71,56 +78,19 @@ C:\Program Files\PalServer\steam\steamapps\common\PalServer\Pal\Saved
 <hr/>
 
 ## 3. 恢复存档
-### 3.1 Windows 系统的存档恢复
-如果你原来是在 Windows 上搭建的 Palworld 服务器，通过计算巢迁移后，仍然会是 Windows 系统。为了恢复存档，你需要将步骤 1 中备份的存档覆盖到这里：
+升级完成后，你可以进入到服务实例详情页。通过界面上的 导入存档 功能，来完成存档导入。
+
+<img src="https://ucc.alicdn.com/pic/developer-ecology/cyrnp3txtwslq_2229821b5f384c62a9ce2615df0aba17.png" width="600"/>
+
+等待任务执行完成，就可以开始游戏了。
+
+## 4. 常见问题
+### 4.1 为什么升级后，我能登录游戏，但是过一会掉线了？
+#### 原因（看不懂可以跳过）
+这个问题通常是出现在 linux 下。因为计算巢搭建幻兽帕鲁服务器，背后运行 PalServer 的 linux user 是 ecs-assist-user，而你有可能是使用 root 来操作了存档文件，导致 ParServer 无法写入存档，就会出现走几步写不了存档文件，程序就崩溃了。
+
+#### 处理方法
+你需要远程连接到 linux 服务器，然后执行：
+```bash
+chown -R ecs-assist-user:ecs-assist-user /home/ecs-assist-user/.steam/steam/SteamApps/common/PalServer/Pal/Saved
 ```
-C:\Program Files\PalServer\steam\steamapps\common\PalServer\Pal\Saved
-```
-
-具体操作：
-1. 参考步骤 1，远程连接到 Windows 服务器桌面
-2. 打开文件夹，将本地的存档 zip 文件，直接拖拽到浏览器中，即可将存档文件传到服务器中的 workbench 文件交换目录。
-
-    <img src="images/upload_windows.png" width="400"/>
-3. 覆盖前，你需要先停止幻兽帕鲁服务器。你可以打开 PowerShell 然后输入并执行以下命令：
-    ```powershell
-    Get-Process -name PalServer-Win64-Test-Cmd | Stop-Process
-    ```
-    PowerShell 可以从这里打开：
-
-    <img src="images/powershell.png" width="400"/>
-
-    <img src="images/stop_service_windows.png" width="400"/>
-4. 将 Saved.zip 解并覆盖到 C:\Program Files\PalServer\steam\steamapps\common\PalServer\Pal\Saved 即可。
-5. 最后，打开 PowerShell 启动帕鲁服务端程序，然后你就可以重新连接游戏了。
-   ```powershell
-   Start-Process "C:\Program Files\PalServer\steam\steamapps\common\PalServer\PalServer.exe"
-   ```
-
-### 3.2 Linux 系统的存档恢复
-如果你原来是在 Linux 上搭建的 Palworld 服务器，通过计算巢迁移后，仍然会是 Linux 系统。为了恢复存档，你需要将步骤 1 中备份的存档覆盖到这里：
-```
-/home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal/Saved
-```
-
-具体操作：
-1. 参考步骤 1，远程连接到 Linux 服务器。
-2. 打开文件树，然后找到幻兽帕鲁存档位置，将存档压缩包上传到 Pal 目录中。
-
-    <img src="images/upload_linux.png" width="400"/>
-3. 覆盖前，你需要先停止幻兽帕鲁服务器。你可以使用如下命令：
-    ```bash
-    systemctl stop pal-server
-    ```
-4. 然后你可以通过如下命令，来替换存档：
-    ```bash
-    # 备份新服务器上的存档
-    mv /home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal/Saved /home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal/Saved_backup
-    # 将原有存档解压，放到 Saved 位置
-    tar -xvf /home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal/PalSaved.tar -C /home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal/
-    mv /home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal/PalSaved /home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal/Saved
-    ```
-5. 最后，启动幻兽帕鲁服务端程序，然后你就可以重新连接游戏了。
-    ```bash
-    systemctl start pal-server
-    ```
