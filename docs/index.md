@@ -1,4 +1,4 @@
-![image](https://github.com/aliyun-computenest/quickstart-palo-exist/assets/3530602/525d5b19-7b62-49c5-b210-667fd6369bcc)# 5 分钟，将你的幻兽帕鲁服务器迁移到计算巢
+# 5 分钟，将你的幻兽帕鲁服务器迁移到计算巢
 
 使用计算巢一键搭建幻兽帕鲁服务器的玩家，可以在控制台上直界面化修改死亡掉落等配置。
 但如果你创建了 ECS，通过 ECS 扩展程序（OOS）来安装的幻兽帕鲁服务器，就没有这些界面化管理功能，需要登陆服务器手动修改配置文件，非常不方便。
@@ -51,7 +51,7 @@ C:\Program Files\PalServer\steam\steamapps\common\PalServer\Pal\Saved
 具体操作：
 1. 访问 [ECS 控制台](https://ecs.console.aliyun.com/server)，找到你的服务器，点击 **远程连接** > **立即登录**。
 
-    <img src="images/connect_to_ecs_windows.png" width="400"/>
+    <img src="images/connect_to_ecs_windows.png" width="1000"/>
 2. 找到存档位置，使用如下命令将存档打包：
    ```bash
    # 迁移前，请先停止游戏服务以确保迁移成功
@@ -61,7 +61,7 @@ C:\Program Files\PalServer\steam\steamapps\common\PalServer\Pal\Saved
    ```
 3. 打包完成后，在 ECS 远程连接界面，点击左上角的文件，**打开文件树**。在打包后的 /PalSaved.zip 文件上右键，选择 **下载文件**。
 
-    <img src="https://ucc.alicdn.com/pic/developer-ecology/cyrnp3txtwslq_a2e39139edd546399791d97ea07cebf3.png" width="400"/>
+    <img src="images/download_saved_game.png" width="600"/>
 <hr/>
 
 ## 2. 创建计算巢幻兽帕鲁管理服务（迁移到计算巢）
@@ -71,16 +71,17 @@ C:\Program Files\PalServer\steam\steamapps\common\PalServer\Pal\Saved
 
    <img src="images/computenest_migration.png" width="400"/>
 
-等待大约 5 分钟，任务就会执行完成，然后你可以在这里获取到新的服务器 IP 及端口。
+   等待大约 5 分钟，任务就会执行完成，然后你可以在这里获取到新的服务器 IP 及端口。
 
-<img src="images/migration_result.png" width="400"/>
+   <img src="images/migration_result.png" width="800"/>
 
 <hr/>
 
 ## 3. 恢复存档
 升级完成后，你可以进入到服务实例详情页。通过界面上的 导入存档 功能，来完成存档导入。
 
-<img src="https://ucc.alicdn.com/pic/developer-ecology/cyrnp3txtwslq_2229821b5f384c62a9ce2615df0aba17.png" width="600"/>
+<img src="images/upload_saved_games.png" width="1000"/>
+
 
 等待任务执行完成，就可以开始游戏了。
 
