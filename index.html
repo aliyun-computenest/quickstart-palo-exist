@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="计算巢是阿里云开放给企业应用服务商的服务管理平台。服务商能够在计算巢上发布私有化部署服务，为其客户提供云上软件一键部署的能力；同时也支持全托管模式的服务，赋能服务商托管其客户资源。">
+  <title>5 分钟，将你的幻兽帕鲁服务器迁移到计算巢 - Aliyun 计算巢 x Demo</title>
+
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css">
+  <link rel="stylesheet" href="css/theme.css">
+  
+
+  
+
+  
+  
+
+  
+    <script src="search/main.js"></script>
+  
+
+  
+
+  <script src="js/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="nav">
+      <div class="nav-inner">
+        <div class="logo">
+          <img src="./img/logo-2x.png">
+        </div>
+        <div class="nav-list">
+          <ul>
+          
+              <li><a href="#5">5 分钟，将你的幻兽帕鲁服务器迁移到计算巢</a></li>
+              
+                  <li><a href="#1">1. 备份存档（无存档可跳过）</a></li>
+                  
+                      <li class="li-h3"><a href="#11-windows-palworld">1.1 Windows 系统的 Palworld 存档备份</a></li>
+                  
+                      <li class="li-h3"><a href="#12-linux-palworld">1.2 Linux 系统的 Palworld 存档备份</a></li>
+                  
+              
+                  <li><a href="#2">2. 创建计算巢幻兽帕鲁管理服务（迁移到计算巢）</a></li>
+                  
+              
+                  <li><a href="#3">3. 恢复存档</a></li>
+                  
+              
+                  <li><a href="#4">4. 常见问题</a></li>
+                  
+                      <li class="li-h3"><a href="#41">4.1 为什么升级后，我能登录游戏，但是过一会掉线了？</a></li>
+                  
+              
+          
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="content theme-github">
+      
+      <div class="content-inner">        
+        
+        <h1 id="5">5 分钟，将你的幻兽帕鲁服务器迁移到计算巢</h1>
+<p>使用计算巢一键搭建幻兽帕鲁服务器的玩家，可以在控制台上直界面化修改死亡掉落等配置。
+但如果你创建了 ECS，通过 ECS 扩展程序（OOS）来安装的幻兽帕鲁服务器，就没有这些界面化管理功能，需要登陆服务器手动修改配置文件，非常不方便。</p>
+<p>为了解决这个问题，现在计算巢支持将你的幻兽帕鲁服务器迁移到计算巢来管理，让你也可以通过界面来管理配置项、升级游戏服务器。</p>
+<p><img src="images/change_game_settings_ui.png" width="500"></p>
+<p>升级过程非常简单，只需三步：
+1. 备份存档
+2. 创建计算巢幻兽帕鲁管理服务
+3. 恢复存档</p>
+<p>如果你原来的幻兽帕鲁服务器上还没有存档，那么你只需一步：创建计算巢管理幻兽帕鲁服务。</p>
+<hr/>
+
+<h2 id="1">1. 备份存档（无存档可跳过）</h2>
+<p>为了使用计算巢的能力来管理幻兽帕鲁服务器，计算巢需要先将你的 ECS 服务器重置为计算巢定制的操作系统镜像。
+所以，如果你的服务器上已经有了存档，为了避免你和帕鲁的努力白费，建议先备份存档。</p>
+<h3 id="11-windows-palworld">1.1 Windows 系统的 Palworld 存档备份</h3>
+<p>如果你原来是通过 ECS 扩展程序（OOS）安装的幻兽帕鲁服务器，且操作系统为 Windows，你可以在这个路径下找到幻兽帕鲁的服务器存档：</p>
+<pre><code>C:\Program Files\PalServer\steam\steamapps\common\PalServer\Pal\Saved
+</code></pre>
+<p>你可以通过远程连接登陆到 ECS 服务器，将该目录打包下载到本地，用于备份。
+具体操作：
+1. 访问 <a href="https://ecs.console.aliyun.com/server">ECS 控制台</a>，找到你的服务器，点击 <strong>远程连接</strong> &gt; <strong>立即登录</strong>。注意不要选择免密登陆。</p>
+<pre><code>&lt;img src="images/connect_to_ecs_windows_ui.png" width="400"/&gt;
+</code></pre>
+<ol>
+<li>备份前你需要先停止游戏服务，以确保所有的游戏进度已写入存档。你可以通过在 PowerShell 中执行这个命令来停止游戏服务。
+   <code>powershell
+   Get-Process -name PalServer-Win64-Test-Cmd | Stop-Process</code></li>
+<li>
+<p>找到存档位置，将存档目录打包成 zip 包。</p>
+<p><img src="images/archive_windows.png" width="400"/>
+4. 将压缩后的存档文件，拖动到 workbench\Download 目录后，就会触发浏览器的文件下载，然后将其下载到本地。</p>
+<p><img src="images/download_windows.png" width="400"/></p>
+</li>
+</ol>
+<hr/>
+
+<h3 id="12-linux-palworld">1.2 Linux 系统的 Palworld 存档备份</h3>
+<p>如果你原来是通过 ECS 扩展程序（OOS）安装的幻兽帕鲁服务器，且操作系统为 Linux，你可以在这个路径下找到幻兽帕鲁的服务器存档：</p>
+<pre><code>/PalSaved
+</code></pre>
+<p>你可以远程登录到 ECS 服务器，将该目录打包下载到本地，用于备份。
+具体操作：
+1. 访问 <a href="https://ecs.console.aliyun.com/server">ECS 控制台</a>，找到你的服务器，点击 <strong>远程连接</strong> &gt; <strong>立即登录</strong>。</p>
+<pre><code>&lt;img src="images/connect_to_ecs_windows.png" width="1000"/&gt;
+</code></pre>
+<ol>
+<li>找到存档位置，使用如下命令将存档打包：
+   <code>bash
+   # 迁移前，请先停止游戏服务以确保迁移成功
+   docker stop palworld-server
+   # 如果提示 command not found，说明没有安装 zip，可以尝试执行 yum install zip 先
+   zip -r /PalSaved.zip /PalSaved</code></li>
+<li>
+<p>打包完成后，在 ECS 远程连接界面，点击左上角的文件，<strong>打开文件树</strong>。在打包后的 /PalSaved.zip 文件上右键，选择 <strong>下载文件</strong>。</p>
+<p><img src="images/download_saved_game.png" width="600"/></p>
+</li>
+</ol>
+<hr/>
+
+<h2 id="2">2. 创建计算巢幻兽帕鲁管理服务（迁移到计算巢）</h2>
+<p>这一步骤非常简单，你只需要根据计算巢的界面指引完成即可。具体操作：
+1. 访问<a href="https://computenest.console.aliyun.com/service/instance/create/cn-hangzhou?type=user&amp;ServiceId=service-959ba5511d6c481fbb50">计算巢幻兽帕鲁管理服务</a>。
+2. 然后选中你需要迁移的服务器，并根据指引，完成创建即可。</p>
+<p><img src="images/computenest_migration.png" width="400"/></p>
+<p>等待大约 5 分钟，任务就会执行完成，然后你可以在这里获取到新的服务器 IP 及端口。</p>
+<p><img src="images/migration_result.png" width="800"/></p>
+<hr/>
+
+<h2 id="3">3. 恢复存档</h2>
+<p>升级完成后，你可以进入到服务实例详情页。通过界面上的 导入存档 功能，来完成存档导入。</p>
+<p><img src="images/upload_saved_games.png" width="1000"/></p>
+<p>等待任务执行完成，就可以开始游戏了。</p>
+<h2 id="4">4. 常见问题</h2>
+<h3 id="41">4.1 为什么升级后，我能登录游戏，但是过一会掉线了？</h3>
+<h4 id="_1">原因（看不懂可以跳过）</h4>
+<p>这个问题通常是出现在 linux 下。因为计算巢搭建幻兽帕鲁服务器，背后运行 PalServer 的 linux user 是 ecs-assist-user，而你有可能是使用 root 来操作了存档文件，导致 ParServer 无法写入存档，就会出现走几步写不了存档文件，程序就崩溃了。</p>
+<h4 id="_2">处理方法</h4>
+<p>你需要远程连接到 linux 服务器，然后执行：</p>
+<pre><code class="language-bash">chown -R ecs-assist-user:ecs-assist-user /home/ecs-assist-user/.steam/steam/SteamApps/common/PalServer/Pal/Saved
+</code></pre>
+        
+      </div>
+
+      <div class="copyrights">© 2009-2022 Aliyun.com 版权所有</div>
+    </div>
+  </div>
+  
+  <!--
+  MkDocs version      : 1.6.0
+  Docs Build Date UTC : 2024-07-08 07:21:47.563275+00:00
+  -->
+</body>
+</html>
